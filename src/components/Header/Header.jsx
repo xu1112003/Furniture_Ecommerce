@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import userIcon from '../../assets/images/user-icon.png'
 import logo from '../../assets/images/eco-logo.png'
 import { motion } from 'framer-motion'
+import { useSelector } from 'react-redux'
 const nav__links = [
   {
     path: 'home',
@@ -21,21 +22,24 @@ const nav__links = [
 ]
 
 const Header = () => {
-  const headerRef = useRef(null)
-  const stickyHeaderFunc = () => {
-    window.addEventListener('scroll',() => {
-      if(document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        headerRef.current.classList.add("sticky__header")
+  const menuRef = useRef(null);
+  const menuToggle = () => menuRef.current.classList.toggle('active__menu')
+  const totalQuantity = useSelector(state => state.cart.totalQuantity)
+  // const headerRef = useRef(null)
+  // const stickyHeaderFunc = () => {
+  //   window.addEventListener('scroll',() => {
+  //     if(document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+  //       headerRef.current.classList.add('sticky__header');
 
-      } else {
-        headerRef.current.classList.remove('sticky__header')
-      }
-    })
-  }
-  useEffect(() => {
-    stickyHeaderFunc()
-    return () => window.removeEventListener('scroll', stickyHeaderFunc)
-  })
+  //     } else {
+  //       headerRef.current.classList.remove('sticky__header');
+  //     }
+  //   })
+  // }
+  // useEffect(() => {
+  //   stickyHeaderFunc()
+  //   return () => window.removeEventListener('scroll', stickyHeaderFunc)
+  // })
   return (
     <header className='header'>
       <Container>
@@ -48,7 +52,7 @@ const Header = () => {
                 
               </div>
             </div>
-            <div className="navigation">
+            <div className="navigation" ref={menuRef} onClick={menuToggle}>
               <ul className="menu">
                 {
                   nav__links.map((item,index) => (
@@ -76,14 +80,14 @@ const Header = () => {
 
               <span className="cart__icon">
                 <i class='ri-shopping-bag-line'></i>
-                <span className="badge">1</span>
+                <span className="badge">{totalQuantity}</span>
               </span>
               <span>
                 <motion.img whileTap={{scale: 1.2}} src={userIcon} alt="" />
               </span>
             </div>
             <div className="mobile__menu">
-              <span>
+              <span onClick={menuToggle}>
                 <i class='ri-menu-line'></i>
               </span>
             </div>
